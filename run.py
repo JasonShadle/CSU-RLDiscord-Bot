@@ -36,10 +36,12 @@ class MyClient(discord.Client):
             if (r.getError() == True):
                 await message.channel.send(message.author.mention + ': That role can\'t be assigned')
             else:
-                if r.hasRole() is True:
-                    await message.author.remove_roles(r)
+                if (r.getHasRole()):
+                    await message.author.remove_roles(r.getRole())
+                    await message.channel.send(message.author.mention + ': Role `'+ r.getRole().name + '` has been removed.')
                 else:
-                    await message.author.add_roles(r)
+                    await message.author.add_roles(r.getRole())
+                    await message.channel.send(message.author.mention + ': Role `'+ r.getRole().name + '` has been added.')
 
 client = MyClient()
 client.run(config.clienttoken)

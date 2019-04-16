@@ -19,25 +19,29 @@ class Roles:
         with open(self.fileName,'r') as file:
             # loop every line in the file
             for line in file:
+                line = line.splitlines()[0]
                 # loop through all permissions of the server
                 for role in self.user.guild.roles:
                     # if the names are equal
+                    # TODO: try to do if (line in role)
                     if (str(line)).lower() == (str(role.name)).lower():
-                        exits = True
+                        exists = True
                         self.role = role
-                        if role in member.roles:
+                        if role in self.user.roles:
                             self.hasRole = True
         if (not exists):
-            self.error = True
-            
+            self.error = True            
         else:
             return(self.role)
 
     def checkError(self):
         return self.error
 
-    def hasRole(self):
+    def getHasRole(self):
         return self.hasRole
     
     def getError(self):
         return self.error
+
+    def getRole(self):
+        return self.role
