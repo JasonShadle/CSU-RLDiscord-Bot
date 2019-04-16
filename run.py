@@ -17,7 +17,7 @@ class MyClient(discord.Client):
         id = message.author.id
         content = message.content
 
-        # set admin flag
+        # check admin list + server admin privilege 
         if id in MyClient.adminList or message.author.guild_permissions.administrator:
             admin = True
         else:

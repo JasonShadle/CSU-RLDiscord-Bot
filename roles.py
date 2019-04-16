@@ -20,9 +20,9 @@ class Roles:
             # loop every line in the file
             for line in file:
                 # loop through all permissions of the server
-                for role in member.server.roles:
+                for role in self.user.guild.roles:
                     # if the names are equal
-                    if lower(str(line)) == lower(str(role.name)):
+                    if (str(line)).lower() == (str(role.name)).lower():
                         exits = True
                         self.role = role
                         if role in member.roles:
@@ -38,3 +38,6 @@ class Roles:
 
     def hasRole(self):
         return self.hasRole
+    
+    def getError(self):
+        return self.error
