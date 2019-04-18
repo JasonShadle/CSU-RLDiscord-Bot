@@ -1,3 +1,6 @@
-def deleteMessage(message, time=None):
-    if time==None:
-        client.delete_message()
+import asyncio
+
+async def deleteTimedMessage(message, time):
+	await asyncio.sleep(time)
+	await message.delete()
+	

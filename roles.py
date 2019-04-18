@@ -1,10 +1,8 @@
-
 class Roles:
-    def __init__(self, message, client):
+    def __init__(self, message):
         # change this if need a different path
         self.fileName = "roles.txt"
         self.message = message
-        self.client = client
         self.user = message.author
         self.id = message.author.id
         self.userPerms = message.author.guild_permissions
@@ -23,7 +21,6 @@ class Roles:
                 # loop through all permissions of the server
                 for role in self.user.guild.roles:
                     # if the names are equal
-                    # TODO: try to do if (line in role)
                     if (str(line)).lower() == (str(role.name)).lower():
                         exists = True
                         self.role = role
@@ -34,9 +31,24 @@ class Roles:
         else:
             return(self.role)
 
-    def checkError(self):
-        return self.error
-
+    def toggle(self, name):
+        delete = False
+        with open(self.fileName,'r+') as file:
+            for line in file:
+                line = line.splitlines()[0]
+                if name == line:
+                    delete = True
+    
+        if delete:
+            infile = open(self.fileName, 'r').readlines()
+            with open(self.fileName, 'w') as outfile:
+                for line in infile:
+                    if name != line.splitlines()[0]:
+                        outfile.write(line)
+        else:
+            with open(self.fileName, 'a') as file:
+                file.write(name)
+        return delete
     def getHasRole(self):
         return self.hasRole
     
