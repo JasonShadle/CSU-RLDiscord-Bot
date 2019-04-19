@@ -2,10 +2,7 @@ class Roles:
     def __init__(self, message):
         # change this if need a different path
         self.fileName = "roles.txt"
-        self.message = message
         self.user = message.author
-        self.id = message.author.id
-        self.userPerms = message.author.guild_permissions
         self.role = ''
         self.roleString = message.content.split(' ')[1]
         self.error = False
@@ -33,18 +30,20 @@ class Roles:
 
     def toggle(self, name):
         delete = False
-        with open(self.fileName,'r+') as file:
+        with open(self.fileName,'r') as file:
             for line in file:
                 line = line.splitlines()[0]
                 if name == line:
                     delete = True
-    
+        # deleting from the file
         if delete:
+            # read file because 'w' will clear it
             infile = open(self.fileName, 'r').readlines()
             with open(self.fileName, 'w') as outfile:
                 for line in infile:
                     if name != line.splitlines()[0]:
                         outfile.write(line)
+        # writing to file
         else:
             with open(self.fileName, 'a') as file:
                 file.write(name)

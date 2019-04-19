@@ -1,6 +1,7 @@
 import asyncio
 
-async def deleteTimedMessage(message, time):
+async def deleteTimedMessage(time, *messages):
 	await asyncio.sleep(time)
-	await message.delete()
+	for message in messages:
+		await message.delete(message)
 	
