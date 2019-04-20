@@ -37,62 +37,46 @@ class MyClient(discord.Client):
             else:
                 await message.channel.send(message.author.mention + ': You are not an admin')
         elif content[:7] == '!roles ':
+            botMessage = ''
             if channelName in ('role-request', 'only-me','bot-setup-and-repair'):
-                if content[7:11] == 'list':
-                    embed = discord.Embed()
-                    with open(config.rolesFile, 'r') as file:
-                        roleLine = ''
-                        for line in file:
-                            roleLine += '\n' + line
-                        embed.add_field(name='Self-Assigned Roles List', value = roleLine)
                 if content[7:14] == 'toggle ':
                     if admin:
                         r = Roles(message)
                         roleName = content[13:].lower()
                         if r.toggle(roleName):
                             botMessage = await message.channel.send('{0}: Role `{1}` has been deleted'.format(message.author.mention, roleName))
-                            deleteTimedMessage(3, message, botMessage)
-                            # await asyncio.sleep(3)                         
-                            # await message.delete()                         
-                            # await botMessage.delete()
+                            await deleteTimedMessage(10, [message, botMessage])
                             
                         else:
-                            await message.channel.send('{0}: Role `{1}` has been added'.format(message.author.mention, roleName))
-
-            else:
-                r = Roles(message)
-                if (r.getError()):
-                    botMessage = await message.channel.send(message.author.mention + ': That role can\'t be assigned')
-                    deleteTimedMessage(3, message, botMessage)
-                    # await asyncio.sleep(3)                         
-                    # await message.delete()                        
-                    # await botMessage.delete()
+                            botMessage = await message.channel.send('{0}: Role `{1}` has been added'.format(message.author.mention, roleName))
+                    await deleteTimedMessage(10, [message, botMessage])
 
                 else:
-                    if (r.getHasRole()):
-                        await message.author.remove_roles(r.getRole())
-                        botMessage = await message.channel.send(message.author.mention + ': Role `'+ r.getRole().name + '` has been removed.')
-                        deleteTimedMessage(3, message, botMessage)
-                        # await asyncio.sleep(3)
-                        # await message.delete()
-                        # await botMessage.delete()
+                    r = Roles(message)
+                    if (r.getError()):
+                        botMessage = await message.channel.send(message.author.mention + ': That role can\'t be assigned')
 
                     else:
-                        await message.author.add_roles(r.getRole())
-                        botMessage = await message.channel.send(message.author.mention + ': Role `'+ r.getRole().name + '` has been added.')
-                        deleteTimedMessage(3, message, botMessage)
-                        # await asyncio.sleep(3)
-                        # await message.delete()
-                        # await botMessage.delete()
-        elif content == '!roles list':
-            embed = discord.Embed()
-            with open(config.rolesFile, 'r') as file:
-                roleLine = ''
-                for line in file:
-                    roleLine += '\n' + line
-                embed.add_field(name='Self-Assigned Roles List', value = roleLine)
-            await message.channel.send(message.author.mention, embed=embed)
+                        if (r.getHasRole()):
+                            await message.author.remove_roles(r.getRole())
+                            botMessage = await message.channel.send(message.author.mention + ': Role `'+ r.getRole().name + '` has been removed.')
 
+                        else:
+                            await message.author.add_roles(r.getRole())
+                            botMessage = await message.channel.send(message.author.mention + ': Role `'+ r.getRole().name + '` has been added.')
+                
+                    await deleteTimedMessage(10, [message, botMessage])
+
+        elif content == '!roles':
+            embed = discord.Embed(color=0x006341, title='Self-Assigned Roles List')
+            with open(config.rolesFile, 'r') as file:
+                for line in file:
+                    name = line
+                    value = '!roles ' + line
+                    embed.add_field(name=name, value=value, inline=False)
+        
+            botMessage = await message.channel.send('{0}:'.format(message.author.mention), embed=embed)
+            await deleteTimedMessage(60, [message, botMessage])
         elif content == '!logoff':
             if id in adminList:
                 client.logoff()

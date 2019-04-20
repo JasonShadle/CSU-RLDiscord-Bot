@@ -18,7 +18,7 @@ class Roles:
                 # loop through all permissions of the server
                 for role in self.user.guild.roles:
                     # if the names are equal
-                    if (str(line)).lower() == (str(role.name)).lower():
+                    if ((str(line)).lower() == (str(self.roleString)).lower() and (str(line)).lower() == str(role.name).lower()):
                         exists = True
                         self.role = role
                         if role in self.user.roles:
