@@ -46,7 +46,7 @@ class Roles:
         # writing to file
         else:
             with open(self.fileName, 'a') as file:
-                file.write(name)
+                file.write(name + '\n')
         return delete
     def getHasRole(self):
         return self.hasRole
