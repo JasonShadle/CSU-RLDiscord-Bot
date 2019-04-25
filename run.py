@@ -74,6 +74,7 @@ class MyClient(discord.Client):
                     # await deleteTimedMessage(10, [message, botMessage])
 
         elif content == '!roles':
+            if channelName in ('role-request'):
             embed = discord.Embed(color=0x006341, title='Self-Assigned Roles List:')
             with open(config.rolesFile, 'r') as file:
                 for line in file:
